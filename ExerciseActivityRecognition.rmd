@@ -1,0 +1,16 @@
+---
+title: "Exercise Activity Recognition"
+author: "Pablo Doval"
+date: "February 27, 2016"
+output: html_document
+---
+
+# Summary
+
+La
+
+# Data Load and Cleansing
+
+```{r}
+summary(cars)
+```
