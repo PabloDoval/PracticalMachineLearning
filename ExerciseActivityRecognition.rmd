@@ -1,16 +1,23 @@
 ---
 title: "Exercise Activity Recognition"
 author: "Pablo Doval"
-date: "February 27, 2016"
+date: "February 28, 2016"
 output: html_document
 ---
 
 # Summary
 
-La
+The marked increase in adoption of wearable technologies has led to quite a considerable ammount of applications and studies that focus on analyzing the quantitative aspects of the human activities tracked by these amazing devices; users of *Fitbit*, *Microsoft's Band*, etc.. are well used now to count their steps, analyze their perfomance on the track and other metrics associated to their physical activity. However, there is another less known field of study, focused on leveraging the sensor's data to infer the specific kind of activity and the quality of the training that the subject is undergoing. 
+
+This study - which is part of the Practical Machine Learning course of the Johns Hopkins Data Sciences specialization in Coursera - will leverage the data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants obtained from [Wearable Computing: Accelerometers' Data Classification of Body Postures and Movements](http://groupware.les.inf.puc-rio.br/work.jsf?p1=10335#ixzz41Pllt7hE)
+
 
 # Data Load and Cleansing
 
-```{r}
-summary(cars)
+```{r "DataLoad", echo = FALSE, warning = FALSE}
+
+#Data loading
+testData <-read.csv(".\\Data\\pml-testing.csv", header = TRUE, na.strings = c("NA", "#DIV/0!", " "))
+trainData <-read.csv(".\\Data\\pml-training.csv", header = TRUE, na.strings = c("NA", "#DIV/0!", " "))
+
 ```
