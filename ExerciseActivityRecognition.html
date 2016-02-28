@@ -80,15 +80,33 @@ img {
 <li><p><em>Train Data:</em></p>
 <p>This is a set of experimental data containing <strong>19622 observations</strong> of <strong>6 subjects</strong>, with <strong>160 columns</strong> for each of the observations. The field <strong>classe</strong> is the feature we aim to predict, being a feature with the following possible values:</p>
 <ul>
-<li>Class A: Exactly according to the specification</li>
-<li>Class B: Throwing the elbows to the front</li>
-<li>Class C: Lifting the dumbbell only halfway</li>
-<li>Class D: Lowering the dumbbell only halfway</li>
-<li>Class E: Throwing the hips to the front</li>
+<li>Class A: Exactly according to the specification.</li>
+<li>Class B: Throwing the elbows to the front.</li>
+<li>Class C: Lifting the dumbbell only halfway.</li>
+<li>Class D: Lowering the dumbbell only halfway.</li>
+<li>Class E: Throwing the hips to the front.</li>
 </ul></li>
 <li><p><em>Test Data:</em></p>
-<p>The test data provided bears</p></li>
+<p>The test data provided has a similar data structure, but does not include the field <strong>classe</strong>, which is the feature to predict.</p></li>
 </ul>
+<p>A brief <em>exploratory data analysis</em> exercise on the data set was performed, which lead to a series of column removals from the original to create a more compact data frame to work with. These following list summarices these changes:</p>
+<ul>
+<li><p><em>Removal of Id column:</em></p>
+<p>This is an autonumeric identity value that does not bring any information to the data set, and cannot be used to infer the quality of the exercise. Hence, this value is discarded from the data set.</p></li>
+<li><p><em>Removal of all columns with NA values:</em></p>
+<p>Most of the classification algorithms cannot be used when there are missing values. For that reason, this study will remove all columns that contain NA’s or any other form of missing values in it. <em>NOTE: Another option could be to try and infer their values, but this scenario was ruled out on this example due to time constraints</em></p></li>
+<li><p><em>Removal of Time Related columns:</em></p>
+<p>This is an autonumeric identity value that does not bring any information to the data set, and cannot be used to infer the quality of the exercise. Hence, this value is discarded from the data set.</p></li>
+<li><p><em>Removal of Test Subject information:</em></p>
+<p>While demographics could be an indicator in siilar exercises, the fact that the test subjects have been instructed to do the exercises in all possible fashions render this unsuitable for te prediction purposes, so this column will be removed as well.</p></li>
+</ul>
+<p>The resulting data set for training contains now <strong>53 columns</strong>, while retaining <strong>19622 observations</strong>, while the data set for testing is <strong>52 wide</strong> with <strong>20 observations</strong>.</p>
+</div>
+<div id="choosing-the-model" class="section level1">
+<h1>Choosing the Model</h1>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
 </div>
 
 

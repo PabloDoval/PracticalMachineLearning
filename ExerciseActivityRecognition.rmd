@@ -9,7 +9,7 @@ output: html_document
 
 # Load used libraries
 library("dplyr")
-##library("ggplot2")
+library("ggplot2")
 ```
 
 # Summary
@@ -34,9 +34,7 @@ totalTrainDataObservations <- nrow(trainData)
 totalTestDataColumns <- ncol(testData)
 totalTrainDataColumns <- ncol(trainData)
 numSubjects <- nrow(trainData %>% distinct(user_name))
-
 ```
-
 
 Data captured using accelerometers on the belt, forearm, arm, and dumbell of 6 participants performing the same exercise - *Unilateral Dumbbell Biceps Curl* - with five different execution qualities is available at the article referenced above, and will be used for this study. The data available is split in two data sets:
 
@@ -44,17 +42,58 @@ Data captured using accelerometers on the belt, forearm, arm, and dumbell of 6 p
  
       This is a set of experimental data containing **`r totalTrainDataObservations` observations** of **`r numSubjects` subjects**, with **`r totalTrainDataColumns` columns** for each of the observations. The field **classe** is the feature we aim to predict, being a feature with the following possible values:
       
-      - Class A: Exactly according to the specification
-      - Class B: Throwing the elbows to the front
-      - Class C: Lifting the dumbbell only halfway
-      - Class D: Lowering the dumbbell only halfway
-      - Class E: Throwing the hips to the front
-      
-      
+      - Class A: Exactly according to the specification.
+      - Class B: Throwing the elbows to the front.
+      - Class C: Lifting the dumbbell only halfway.
+      - Class D: Lowering the dumbbell only halfway.
+      - Class E: Throwing the hips to the front.
+
 
  - *Test Data:*
  
-      The test data provided bears 
+      The test data provided has a similar data structure, but does not include the field **classe**, which is the feature to predict.
+      
+A brief *exploratory data analysis* exercise on the data set was performed, which lead to a series of column removals from the original to create a more compact data frame to work with. These following list summarices these changes:
+
+ - *Removal of Id column:* 
  
+    This is an autonumeric identity value that does not bring any information to the data set, and cannot be used to infer the quality of the exercise. Hence, this value is discarded from the data set.
+    
+  - *Removal of all columns with NA values:*
+  
+    Most of the classification algorithms cannot be used when there are missing values. For that reason, this study will remove all columns that contain NA's or any other form of missing values in it. *NOTE: Another option could be to try and infer their values, but this scenario was ruled out on this example due to time constraints*
+ 
+ - *Removal of Time Related columns:* 
+ 
+    This is an autonumeric identity value that does not bring any information to the data set, and cannot be used to infer the quality of the exercise. Hence, this value is discarded from the data set.
+ 
+- *Removal of Test Subject information:* 
+ 
+    While demographics could be an indicator in siilar exercises, the fact that the test subjects have been instructed to do the exercises in all possible fashions render this unsuitable for te prediction purposes, so this column will be removed as well. 
+ 
+```{r "DataCleansing", echo = FALSE, warning = FALSE}
+
+# Removal of the identity column, time stamps and user related information
+cleanTrainData <- trainData
+cleanTrainData <- cleanTrainData[, -c(1:7)]
+
+# Remove all columns that has any NA value
+cleanTrainData <- cleanTrainData[, apply(cleanTrainData, 2, function(x) !any(is.na(x)))] 
+trainCleanColumns <- ncol(cleanTrainData)
+trainCleanRows <- nrow(cleanTrainData)
+
+# Same transformations on the test data set. NOTE: here we cannot just apply the removal of any NA column,
+# because the subset might not be the same than in the training data subset. Instead, we will just filter
+# by the same column names than in the clean training data set.
+cleanTestData <- testData[, names(cleanTrainData[, -53])]
+testCleanColumns <- ncol(cleanTestData)
+testCleanRows <- nrow(cleanTestData)
+```
+ 
+The resulting data set for training contains now **`r trainCleanColumns` columns**, while retaining **`r trainCleanRows` observations**, while the data set for testing is **`r testCleanColumns` wide** with **`r testCleanRows` observations**.
+
+# Choosing the Model
+
+# Results
  
 
