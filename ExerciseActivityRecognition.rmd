@@ -1,23 +1,60 @@
 ---
-title: "Exercise Activity Recognition"
+title: "Automatic Quality of Exercise Activity Assessment"
 author: "Pablo Doval"
 date: "February 28, 2016"
 output: html_document
 ---
 
+```{r "LoadLibraries", error = FALSE, echo = FALSE, warning = FALSE, message = FALSE}
+
+# Load used libraries
+library("dplyr")
+##library("ggplot2")
+```
+
 # Summary
 
 The marked increase in adoption of wearable technologies has led to quite a considerable ammount of applications and studies that focus on analyzing the quantitative aspects of the human activities tracked by these amazing devices; users of *Fitbit*, *Microsoft's Band*, etc.. are well used now to count their steps, analyze their perfomance on the track and other metrics associated to their physical activity. However, there is another less known field of study, focused on leveraging the sensor's data to infer the specific kind of activity and the quality of the training that the subject is undergoing. 
 
-This study - which is part of the Practical Machine Learning course of the Johns Hopkins Data Sciences specialization in Coursera - will leverage the data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants obtained from [Wearable Computing: Accelerometers' Data Classification of Body Postures and Movements](http://groupware.les.inf.puc-rio.br/work.jsf?p1=10335#ixzz41Pllt7hE)
+This study - which is part of the Practical Machine Learning course of the Johns Hopkins Data Sciences specialization in Coursera - will leverage the data from the Weight Lifting Exercises Dataset, obtained from [Wearable Computing: Accelerometers' Data Classification of Body Postures and Movements](http://groupware.les.inf.puc-rio.br/work.jsf?p1=10335#ixzz41Pllt7hE), and predcit, based on the movement values, the quality of the execution.
 
 
 # Data Load and Cleansing
 
+
 ```{r "DataLoad", echo = FALSE, warning = FALSE}
 
-#Data loading
+# Data loading
 testData <-read.csv(".\\Data\\pml-testing.csv", header = TRUE, na.strings = c("NA", "#DIV/0!", " "))
 trainData <-read.csv(".\\Data\\pml-training.csv", header = TRUE, na.strings = c("NA", "#DIV/0!", " "))
 
+# Get some basic statistics for simplifying the report content creation in R Markdown
+totalTestDataObservations <- nrow(testData)
+totalTrainDataObservations <- nrow(trainData)
+totalTestDataColumns <- ncol(testData)
+totalTrainDataColumns <- ncol(trainData)
+numSubjects <- nrow(trainData %>% distinct(user_name))
+
 ```
+
+
+Data captured using accelerometers on the belt, forearm, arm, and dumbell of 6 participants performing the same exercise - *Unilateral Dumbbell Biceps Curl* - with five different execution qualities is available at the article referenced above, and will be used for this study. The data available is split in two data sets:
+
+ - *Train Data:*
+ 
+      This is a set of experimental data containing **`r totalTrainDataObservations` observations** of **`r numSubjects` subjects**, with **`r totalTrainDataColumns` columns** for each of the observations. The field **classe** is the feature we aim to predict, being a feature with the following possible values:
+      
+      - Class A: Exactly according to the specification
+      - Class B: Throwing the elbows to the front
+      - Class C: Lifting the dumbbell only halfway
+      - Class D: Lowering the dumbbell only halfway
+      - Class E: Throwing the hips to the front
+      
+      
+
+ - *Test Data:*
+ 
+      The test data provided bears 
+ 
+ 
+
