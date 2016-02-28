@@ -73,8 +73,10 @@ img {
 <p>The marked increase in adoption of wearable technologies has led to quite a considerable ammount of applications and studies that focus on analyzing the quantitative aspects of the human activities tracked by these amazing devices; users of <em>Fitbit</em>, <em>Microsoft’s Band</em>, etc.. are well used now to count their steps, analyze their perfomance on the track and other metrics associated to their physical activity. However, there is another less known field of study, focused on leveraging the sensor’s data to infer the specific kind of activity and the quality of the training that the subject is undergoing.</p>
 <p>This study - which is part of the Practical Machine Learning course of the Johns Hopkins Data Sciences specialization in Coursera - will leverage the data from the Weight Lifting Exercises Dataset, obtained from <a href="http://groupware.les.inf.puc-rio.br/work.jsf?p1=10335#ixzz41Pllt7hE">Wearable Computing: Accelerometers’ Data Classification of Body Postures and Movements</a>, and predcit, based on the movement values, the quality of the execution.</p>
 </div>
-<div id="data-load-and-cleansing" class="section level1">
-<h1>Data Load and Cleansing</h1>
+<div id="pre-processing" class="section level1">
+<h1>Pre-Processing</h1>
+<div id="data-loading" class="section level2">
+<h2>Data Loading</h2>
 <p>Data captured using accelerometers on the belt, forearm, arm, and dumbell of 6 participants performing the same exercise - <em>Unilateral Dumbbell Biceps Curl</em> - with five different execution qualities is available at the article referenced above, and will be used for this study. The data available is split in two data sets:</p>
 <ul>
 <li><p><em>Train Data:</em></p>
@@ -86,9 +88,12 @@ img {
 <li>Class D: Lowering the dumbbell only halfway.</li>
 <li>Class E: Throwing the hips to the front.</li>
 </ul></li>
-<li><p><em>Test Data:</em></p>
-<p>The test data provided has a similar data structure, but does not include the field <strong>classe</strong>, which is the feature to predict.</p></li>
+<li><p><em>Validation Data:</em></p>
+<p>The test data provided has a similar data structure, but does not include the field <strong>classe</strong>, which is the feature to predict. This data will be stored for later usage as a validation data set, and will not be part of the testing data for the different algorithms.</p></li>
 </ul>
+</div>
+<div id="data-cleansing" class="section level2">
+<h2>Data Cleansing</h2>
 <p>A brief <em>exploratory data analysis</em> exercise on the data set was performed, which lead to a series of column removals from the original to create a more compact data frame to work with. These following list summarices these changes:</p>
 <ul>
 <li><p><em>Removal of Id column:</em></p>
@@ -101,6 +106,11 @@ img {
 <p>While demographics could be an indicator in siilar exercises, the fact that the test subjects have been instructed to do the exercises in all possible fashions render this unsuitable for te prediction purposes, so this column will be removed as well.</p></li>
 </ul>
 <p>The resulting data set for training contains now <strong>53 columns</strong>, while retaining <strong>19622 observations</strong>, while the data set for testing is <strong>52 wide</strong> with <strong>20 observations</strong>.</p>
+</div>
+<div id="data-partitioning" class="section level2">
+<h2>Data Partitioning</h2>
+<p>Since it has been decided to keep away the test data supplied by the data source for use as validation data, it is needed to generate an specific subset of data to use as testing data for the different algorithms that will be evaluated as part of this study. The new train data subset will be <strong>70%</strong> of the original training data available, while the remainder will be used as test data.</p>
+</div>
 </div>
 <div id="choosing-the-model" class="section level1">
 <h1>Choosing the Model</h1>

@@ -5,11 +5,14 @@ date: "February 28, 2016"
 output: html_document
 ---
 
-```{r "LoadLibraries", error = FALSE, echo = FALSE, warning = FALSE, message = FALSE}
+```{r "Setup", error = FALSE, echo = FALSE, warning = FALSE, message = FALSE}
+# Random seed for all the study
+set.seed(1979)
 
 # Load used libraries
 library("dplyr")
 library("ggplot2")
+library("caret")
 ```
 
 # Summary
@@ -19,19 +22,21 @@ The marked increase in adoption of wearable technologies has led to quite a cons
 This study - which is part of the Practical Machine Learning course of the Johns Hopkins Data Sciences specialization in Coursera - will leverage the data from the Weight Lifting Exercises Dataset, obtained from [Wearable Computing: Accelerometers' Data Classification of Body Postures and Movements](http://groupware.les.inf.puc-rio.br/work.jsf?p1=10335#ixzz41Pllt7hE), and predcit, based on the movement values, the quality of the execution.
 
 
-# Data Load and Cleansing
+# Pre-Processing
+
+## Data Loading 
 
 
 ```{r "DataLoad", echo = FALSE, warning = FALSE}
 
 # Data loading
-testData <-read.csv(".\\Data\\pml-testing.csv", header = TRUE, na.strings = c("NA", "#DIV/0!", " "))
+validationData <-read.csv(".\\Data\\pml-testing.csv", header = TRUE, na.strings = c("NA", "#DIV/0!", " "))
 trainData <-read.csv(".\\Data\\pml-training.csv", header = TRUE, na.strings = c("NA", "#DIV/0!", " "))
 
 # Get some basic statistics for simplifying the report content creation in R Markdown
-totalTestDataObservations <- nrow(testData)
+totalValidationDataObservations <- nrow(validationData)
 totalTrainDataObservations <- nrow(trainData)
-totalTestDataColumns <- ncol(testData)
+totalValidationDataColumns <- ncol(validationData)
 totalTrainDataColumns <- ncol(trainData)
 numSubjects <- nrow(trainData %>% distinct(user_name))
 ```
@@ -49,10 +54,12 @@ Data captured using accelerometers on the belt, forearm, arm, and dumbell of 6 p
       - Class E: Throwing the hips to the front.
 
 
- - *Test Data:*
+ - *Validation Data:*
  
-      The test data provided has a similar data structure, but does not include the field **classe**, which is the feature to predict.
-      
+      The test data provided has a similar data structure, but does not include the field **classe**, which is the feature to predict. This data will be stored for later usage as a validation data set, and will not be part of the testing data for the different algorithms.
+
+## Data Cleansing
+
 A brief *exploratory data analysis* exercise on the data set was performed, which lead to a series of column removals from the original to create a more compact data frame to work with. These following list summarices these changes:
 
  - *Removal of Id column:* 
@@ -85,12 +92,28 @@ trainCleanRows <- nrow(cleanTrainData)
 # Same transformations on the test data set. NOTE: here we cannot just apply the removal of any NA column,
 # because the subset might not be the same than in the training data subset. Instead, we will just filter
 # by the same column names than in the clean training data set.
-cleanTestData <- testData[, names(cleanTrainData[, -53])]
-testCleanColumns <- ncol(cleanTestData)
-testCleanRows <- nrow(cleanTestData)
+cleanValidationData <- validationData[, names(cleanTrainData[, -53])]
+validationCleanColumns <- ncol(cleanValidationData)
+validationCleanRows <- nrow(cleanValidationData)
 ```
  
-The resulting data set for training contains now **`r trainCleanColumns` columns**, while retaining **`r trainCleanRows` observations**, while the data set for testing is **`r testCleanColumns` wide** with **`r testCleanRows` observations**.
+The resulting data set for training contains now **`r trainCleanColumns` columns**, while retaining **`r trainCleanRows` observations**, while the data set for testing is **`r validationCleanColumns` wide** with **`r validationCleanRows` observations**.
+
+## Data Partitioning
+
+```{r "DataPartitioning", echo = FALSE, warning = FALSE}
+
+# Training data threshold
+trainingThreshold <- 0.7
+
+# Partitioning using the caret package
+trainRows <- createDataPartition(cleanTrainData$classe, p = trainingThreshold, list = FALSE)
+training <- cleanTrainData[trainRows,]
+testing <- cleanTrainData[-trainRows,]
+
+```
+
+Since it has been decided to keep away the test data supplied by the data source for use as validation data, it is needed to generate an specific subset of data to use as testing data for the different algorithms that will be evaluated as part of this study. The new train data subset will be **`r paste(round(trainingThreshold*100,digits=1),"%",sep="")`** of the original training data available, while the remainder will be used as test data.
 
 # Choosing the Model
 
