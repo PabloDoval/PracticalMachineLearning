@@ -141,16 +141,19 @@ predictor <- predict(trainedModel, newdata = testing)
 confusionMatrix(predictor, testing$classe)
 ```
 
+The confussion matrix reveals a pretty solid performance, with an **accuracy of 0.992** and a **Kappa = 0.99**. We will accept this model and use it against our target data set.
+
+# Results
+
+The predictor is used again with the validation data set - which was reserved from the begining of the study - and the results are evaluated:
 
 ```{r "Prediction", echo = TRUE, warning = FALSE}
 # Predict against the validation data set
 result <- predict(trainedModel, newdata = validationData)
+result
+``` 
 
-```
-
-# Results
- 
-A set of 20 files will be generated automatically as a sub-product of this study in order to evaluate the prediction of the model and assess the results for the course.
+Finally, a set of 20 files will be generated automatically as a sub-product of this study in order to evaluate the prediction of the model and assess the results for the course.
 
 ```{r "WriteResults", echo = FALSE, warning = FALSE}
 # Helper function to write the output files.
