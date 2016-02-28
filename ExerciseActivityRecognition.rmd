@@ -117,6 +117,54 @@ Since it has been decided to keep away the test data supplied by the data source
 
 # Choosing the Model
 
+After evaluating a set of different algorithms for the classification (like logistic regression and Support Vector Machines) it was decided to settle for decision trees; they have proven to have a very good performance for this data set in terms of accuracy of the prediction, and the decision tree family of algorithms allow for a very good understanding of the model, whereas other algorithms as SVM are more obscure to explain and extract conclussions.
+
+```{r "TrainModel", echo = FALSE, warning = FALSE, message= FALSE}
+
+# Fit the Random Forests with Cross-Validation
+control <- trainControl(method = "cv", 
+                        number = 10, 
+                        allowParallel = TRUE, 
+                        verbose = TRUE)
+trainedModel <- train(classe ~ ., 
+                      data = training, 
+                      method = "rf", 
+                      trControl = control, 
+                      verbose = FALSE)
+```
+
+The model was trained with a *[K-fold Cross Validation](https://en.wikipedia.org/wiki/Cross-validation_(statistics)#K-fold_cross-validation)* resampling, with **k=10**, which then was used to create a predictor against the testing data set. The results can be seen in the following confussion matrix:
+
+```{r "BuildPredictor", echo = TRUE, warning = FALSE}
+# Predict against the testing data set
+predictor <- predict(trainedModel, newdata = testing)
+confusionMatrix(predictor, testing$classe)
+```
+
+
+```{r "Prediction", echo = TRUE, warning = FALSE}
+# Predict against the validation data set
+result <- predict(trainedModel, newdata = validationData)
+
+```
+
 # Results
  
+A set of 20 files will be generated automatically as a sub-product of this study in order to evaluate the prediction of the model and assess the results for the course.
 
+```{r "WriteResults", echo = FALSE, warning = FALSE}
+# Helper function to write the output files.
+writeResults = function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename = paste0("problemId_",i,".txt")
+    write.table(x[i], 
+                file = filename,
+                quote = FALSE, 
+                row.names = FALSE, 
+                col.names = FALSE)
+  }
+}
+
+writeResults(result)
+```
